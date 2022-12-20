@@ -1,0 +1,131 @@
+1.LONGEST SUBSTRING WITHOUT REPEATING CHARACTERS(LEETCODE NO:3)
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        HashMap<Character,Integer>Map=new HashMap<>();
+        int max=0;
+        for(int r=0,l=0;r<s.length();r++){
+            if(Map.containsKey(s.charAt(r))){
+                l=Math.max(l,Map.get(s.charAt(r))+1);
+            }
+            Map.put(s.charAt(r),r);
+            max=Math.max(max,r-l+1);
+        }
+        return max;
+        
+    }
+}
+---------------------------------------------------------------------------------------------------
+2.VALID PARENTHESES(LEETCODE NO:20)
+
+class Solution {
+    public boolean isValid(String s) {
+        Stack<Character>stack=new Stack<Character>();
+        for(char c:s.toCharArray()){
+            if(c=='('){
+                stack.push(')');
+            }
+            else if(c=='{'){
+                stack.push('}');
+            }
+            else if(c=='['){
+                stack.push(']');
+            }
+            else if(stack.isEmpty() || stack.pop()!=c)
+            return false;
+        }        
+        return stack.isEmpty();
+    }
+}
+-----------------------------------------------------------------------------------------------------
+3.NEXT PERMUTATION (LEETCODE NO:31)
+
+class Solution{
+public void nextPermutation(int[] nums) {
+    if (nums.length <= 2) {
+        swap(nums, 0, 1);
+    } else {
+        int i = nums.length - 2;
+        while (i >= 0 && nums[i] >= nums[i+1]) {i--;}
+        if (i >= 0) {
+            int j = nums.length - 1;
+            while (j > i && nums[i] >= nums[j]) {j--;}
+            swap(nums, i, j);
+        }
+        reverse(nums, i+1, nums.length - 1);
+    }
+}
+
+public void swap(int[] nums, int i, int j) {
+    if (j < nums.length) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+
+
+public void reverse(int[] nums, int i, int j) {
+    while (i < j) swap(nums, i++, j--);
+}
+}
+----------------------------------------------------------------------------------------
+4.LARGEST RECTANGLE IN HISTOGRAM(LEETCODE NO:84)
+
+class Solution {
+        public int largestRectangleArea(int[] h) {
+        int stack[] = new int[h.length], size = 0, max = 0;
+        for (int i = 0; i < h.length; i++) {
+            if (size == 0 || h[stack[size - 1]] < h[i])
+                stack[size++] = i;
+            while (size > 0 && h[stack[size - 1]] >= h[i])
+                max = Math.max(max, h[stack[--size]] * (i - (size == 0 ? 0 : stack[size - 1] + 1))); 
+            stack[size++] = i;
+        }   
+        while (size > 0)
+            max = Math.max(max, h[stack[--size]] * (h.length - (size == 0 ? 0 : stack[size - 1] + 1))); 
+        return max;
+    }
+}
+-------------------------------------------------------------------------------------------
+5.NEXT GREATER ELEMENT (LEETCODE NO:503)
+
+class Solution {
+    public int[] nextGreaterElements(int[] nums) {
+        int[] res = new int[nums.length];
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 2 * nums.length - 1; i >= 0; --i) {
+            while (!stack.empty() && nums[stack.peek()] <= nums[i % nums.length]) {
+                stack.pop();
+            }
+            res[i % nums.length] = stack.empty() ? -1 : nums[stack.peek()];
+            stack.push(i % nums.length);
+        }
+        return res;
+    }
+}
+-----------------------------------------------------------------------------------------------
+6.NEXT GREATER ELEMENT (LEETCODE NO:496)
+
+class Solution{
+     public int[] nextGreaterElement(int[] findNums, int[] nums) {
+     HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+    Stack<Integer> st = new Stack<Integer>();
+    int[] result = new int[findNums.length];
+        
+    for(int num : nums){
+        while(!st.isEmpty() && st.peek() < num){
+            map.put(st.pop(), num);
+        }
+        st.push(num);
+        }
+        
+    for(int i = 0; i < findNums.length; i++){
+        result[i] = map.getOrDefault(findNums[i], -1);
+     }
+        
+    return result;
+     }
+ }
+
+        
